@@ -9,20 +9,29 @@ require_once 'functions/functions.php';
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>MOVIES - VIDEOTECA</title>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <LINK rel="stylesheet" href='style.css'> 
+        <LINK rel="stylesheet" href='style.css'>  
+        
     </head>
 <body>
 <?php include "includes/header.php"; ?>
 <div class="main">   
     <H1>MOVIES</H1> 
-    
+      
 <?php
     try {
         $rows = getAllMovies();
         
         echo "<H3>Our DB conteins " . count($rows) . " movies.</H3>";
-        echo "<table><tr><td><b>Title</b></td><td><b>Year</b></td></tr>";
+        echo "<table class='table table-hover'>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Year</th>
+              </tr>
+            </thead>
+            <tbody>";
 
         foreach($rows as $row){
             echo "<tr>";
@@ -30,7 +39,7 @@ require_once 'functions/functions.php';
             echo "<tr>";
         }
 
-        echo "</table>";
+        echo "<tbody></table>";
         
     } catch (Exception $ex) {
             echo $ex->getMessage();

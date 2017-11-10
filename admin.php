@@ -5,6 +5,7 @@ $email = "";
 $password = "";
 $logged_in = FALSE;
 $msg ="";
+$class = "msgok";
 
 if (isset($_SESSION['logged_in'])){
     if (!is_null(filter_input(INPUT_POST, 'btn_logout')))  {
@@ -27,6 +28,7 @@ if (isset($_SESSION['logged_in'])){
             $msg = 'Welcome back '. htmlentities($name, ENT_QUOTES, 'utf-8');
         } else {
             $msg = 'Sorry, your credentials are invalid';
+            $class = "msgerror";
         }
     }
 }
@@ -51,8 +53,14 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
 <?php include "includes/header.php"; ?>   
 
 <div class="main">
-    <?php echo $msg; ?>
+    
     <H1>ADMIN</H1>
+    
+    <?php if ($msg<>""){ ; ?>
+    <div class="<?php echo $class; ?>">
+    <?php echo $msg; ?>
+    </div>
+    <?php } ?>
     
     <?php if(!$logged_in) {?>    
         <form action="admin.php" id="form_login" method="post">

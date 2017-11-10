@@ -8,6 +8,7 @@ $password = "";
 
 $logged_in = FALSE;
 $msg ="";
+$class = "msgok";
 $the_user = new UserService();
 
 if (!is_null(filter_input(INPUT_POST, 'btn_register')) || !is_null(filter_input(INPUT_POST, 'btn_update'))) {
@@ -28,15 +29,16 @@ if (isset($_SESSION['logged_in'])){
                 $msg = 'Dear '. htmlentities($name, ENT_QUOTES, 'utf-8')." your data has been updated";
             }else{
                 $msg = 'Error during the update';
+                $class = "msgerror";
             }
         } else {
             $msg = 'Sorry, this email is already in our DB';
+            $class = "msgerror";
         }
     } else {
         $name = $_SESSION['user']['name'];
         $surname = $_SESSION['user']['surname'];
         $email = $_SESSION['user']['email'];
-        //$password = $_SESSION['user']['name'];
         $msg = 'Welcomeback '. htmlentities($name, ENT_QUOTES, 'utf-8');
     }   
 } else {
@@ -49,9 +51,11 @@ if (isset($_SESSION['logged_in'])){
                 $logged_in = TRUE;
             } else {
                 $msg = 'Error during the registration';
+                $class = "msgerror";
             }
         } else {
             $msg = 'Sorry, your email is already in our DB';
+            $class = "msgerror";
         }
     }
 }
@@ -78,8 +82,14 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
 <?php include "includes/header.php"; ?>   
 
 <div class="main">
-    <?php echo $msg; ?>
+    
     <H1>ADMIN</H1>
+    
+    <?php if ($msg<>""){ ; ?>
+    <div class="<?php echo $class; ?>">
+    <?php echo $msg; ?>
+    </div>
+    <?php } ?>
     
     <?php if (!$logged_in) {?>    
         <form action="admin-register.php" id="form_register" method="post">

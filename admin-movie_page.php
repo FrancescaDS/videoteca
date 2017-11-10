@@ -12,6 +12,7 @@
     
     $msg = "";
     $done = "";
+    $class = "msgok";
     
     if (!is_null(filter_input(INPUT_POST, 'btn_movie'))) {
         $title = filter_input(INPUT_POST, 'title');
@@ -30,9 +31,11 @@
                 $msg = "Record inserted/updated";
             } else {
                 $msg = "Error insert/update";
+                $class = "msgerror";
             }
         } else {
             $msg = "These name + year are in another record";
+            $class = "msgerror";
         }
     }
     
@@ -66,8 +69,14 @@
  <?php include "includes/header.php"; ?>   
         
         <div class="main">
-        <?php echo $msg; ?>
         <H1>MOVIE</H1>
+        
+    <?php if ($msg<>""){ ; ?>
+    <div class="<?php echo $class; ?>">
+    <?php echo $msg; ?>
+    </div>
+    <?php } ?>
+        
         <form action="admin-movie_page.php" id="form_movie" method="post">
         <INPUT type='text' name='id' hidden="true" value="<?php echo $che_id; ?>">
             <div class="form-group">
