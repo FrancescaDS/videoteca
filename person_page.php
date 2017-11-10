@@ -10,14 +10,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>PERSON - VIDEOTECA</title>
+        <title>PERSON PAGE - VIDEOTECA</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <LINK rel="stylesheet" href='style.css'> 
     </head>
-    <body>
-
-    <?php include "includes/header.php"; ?>
-   
-    <H1>PERSON</H1>
+<body>
+<?php include "includes/header.php"; ?>
+<div class="main">   
+    <H1>PERSON PAGE</H1>
+    
         <TABLE>
             <?php
             $img = "archive/people/".$che_id.".jpg";
@@ -40,7 +41,7 @@
                     echo "</TD></TR>";
                 }
                 $list = $person->getPlayedMovies();
-                if (!empty($list)){ echo "<TR><TD class='newp'>Director</TD>"
+                if (!empty($list)){ echo "<TR><TD class='newp'>Actor/Actress</TD>"
                     . "<TD>"; 
                 foreach ($list as $row) {
                     echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A>  (".$row['year'].") as " . $row['character_name'] . "<br>";
@@ -50,10 +51,9 @@
             ?>
         </TABLE>
     
- <?php include "includes/links.php"; ?>
-
+<?php include "includes/links.php"; ?>
+</div>
+    
 <?php include "includes/footer.php"; ?>
-  </BODY>
-</HTML>
-
-
+</body>
+</html>

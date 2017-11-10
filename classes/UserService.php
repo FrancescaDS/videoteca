@@ -13,85 +13,73 @@
 
 class UserService {
 
-    /**
-     * The database connection object (PDO)
-     */
-    protected $db;
+    protected $connection_object;
 
-    /**
-     * Array containg the user's data (email, name, etc.)
-     * NB: This probably shouldn't be stored in this object, but we want to
-     * keep things relatively simple at this stage.
-     */
+    //data[] = array where keys are names of fields
+    //id_user, name, surname, email, password
     protected $data;
 
-    /**
-     * The constructor expects to be passed an instance of a PDO object
-     * (notice the type hint). It stores the passed object in the $db property.
-     */
-    public function __construct(PDO $connection_object) {
-        $this->db = $connection_object;
+    public function __construct() {
+        $db = new Mydb();
+        $this->connection_object = $db->mysql;
     }
 
-    /**
-     * This function registers a new user on the system (i.e. it creates
-     * a new record in the database). Note how it does not check if the
-     * email address already exists in the database. This would most likely
-     * be carried out by validation code, before this method is called.
-     * Because it is not good to store passwords as plain text, the built-in
-     * "password_hash" function has been used to create a hashed copy which
-     * is safe to store.
-     */
-    public function register($email, $password, $firstname, $surname) {
-        // Query to insert the user's data
-        $query = "INSERT INTO users (email, password, firstname, surname)
-        VALUES (:email, :password, :firstname, :surname)";
-
-        // Prepare the statement
-        $statement = $this->db->prepare($query);
-
-        // Values to use with prepared statement
-        $query_data = [
-            ':email' => $email,
-            ':password' => password_hash($password, PASSWORD_BCRYPT),
-            ':firstname' => $firstname,
-            ':surname' => $surname
-        ];
-
-        // Execute the statement
-        if ($statement->execute($query_data)) {
-            // If query successful, add user's data to the $data object property
+    public function update($id_user, $email, $name, $surname, $password = "") {
+        $sql = "UPDATE users SET email='".$email."', name='".$name."', surname='".$surname."' ";
+        if ($password <> ""){
+            $sql = @sql . ", password='".$password."' ";
+        }
+        $sql = @sql . " WHERE id_user=".$id_user;
+        $stat = $this->connection_object->prepare($sql);
+        if ($stat->execute()) {
             $this->data = [
-                'id' => $this->db->lastInsertId(),
+                'id_user' => $id_user,
                 'email' => $email,
-                'firstname' => $firstname,
+                'name' => $name,
                 'surname' => $surname,
             ];
             return true;
         } else {
             return false;
         }
+    }
+    
+    public function register($email, $password, $name, $surname) {
+        $sql = "INSERT INTO users (email, password, name, surname)
+        VALUES (:email, :password, :name, :surname)";
+        $stat = $this->connection_object->prepare($sql);
 
+        // Values to use with prepared statement
+        $query_data = [
+            ':email' => $email,
+            ':password' => password_hash($password, PASSWORD_BCRYPT),
+            ':name' => $name,
+            ':surname' => $surname
+        ];
+
+        // Execute the statement
+        if ($stat->execute($query_data)) {
+            // If query successful, add user's data to the $data object property
+            $this->data = [
+                'id_user' => $this->connection_object->lastInsertId(),
+                'email' => $email,
+                'name' => $name,
+                'surname' => $surname,
+            ];
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    /**
-     * This function attempts to log a user into the system.
-     * It expects to be passed the user's email and password as plain text
-     * (i.e. not hashed or encrypted in any way).
-     * First, it selects records that match the passed in email address
-     * (there should only be one record returned). It then compares the
-     * stored password (which is hashed) with the plain text password
-     * that was passed to the function. The built-in "password_verify"
-     * function makes it trivial to do this.
-     */
     public function login($user_email, $user_password) {
-        $statement = $this->selectUser($user_email);
+        $stat = $this->selectUser($user_email);
 
         // We should only get one record in our results
-        if ($statement->rowCount() == 1) {
+        if ($stat->rowCount() == 1) {
 
             // Get record data as an associative array
-            $stored_data = $statement->fetch(PDO::FETCH_ASSOC);
+            $stored_data = $stat->fetch(PDO::FETCH_ASSOC);
 
             // Compare plain text password passed to function with hashed
             // version stored in database
@@ -111,34 +99,27 @@ class UserService {
 
     }
 
-    /*
-     * Public "getter" method so outside code can access the user's data
-     * (which is a protected property). As mentioned above, we probably
-     * shouldn't store this data in this object... a dedicated "User"
-     * object would be preferable...
-     */
     public function getData() {
         return $this->data;
     }
 
-    public function existsEmail($email){
-        return ($this->selectUser($email)->rowCount() == 1);
+    public function existsEmail($email, $id = 0){
+        if ($id === 0){
+            return ($this->selectUser($email)->rowCount() == 1);
+        } else {
+            $sql = "SELECT * FROM users WHERE email='".$email."' AND id_user<>".$id;
+            $stat = $this->connection_object->prepare($sql);
+            $stat->execute();
+            return ($stat->rowCount() == 1);
+        }
     }
     
     private function selectUser($email){
-        // Query to select rows with correct email value
-        $query = "SELECT * FROM users WHERE email = :email";
-
-        // Prepare the statement
-        $statement = $this->db->prepare($query);
-
-        // Value to use with prepared statement
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stat = $this->connection_object->prepare($sql);
         $query_data = [':email' => $email];
-
-        // Execute the query
-        $statement->execute($query_data);
-        
-        return $statement;
+        $stat->execute($query_data);
+        return $stat;
     }
     
 }

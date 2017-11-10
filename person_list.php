@@ -17,12 +17,13 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php echo strtoupper($title) ?> - VIDEOTECA</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <LINK rel="stylesheet" href='style.css'> 
     </head>
-    <body>
-        
-    <?php include "includes/header.php"; ?>
-   
+<body>
+<?php include "includes/header.php"; ?>
+<div class="main">   
     <H1><?php echo strtoupper($title) ?></H1>
+    
 <?php
     try {
         $rows = getAllPeople($what);
@@ -44,9 +45,9 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
 
 ?>
 
-    <?php include "includes/links.php"; ?>
+ <?php include "includes/links.php"; ?>
+</div>
     
-    <?php include "includes/footer.php"; ?>
-  
-    </BODY>
-</HTML>
+<?php include "includes/footer.php"; ?>
+</body>
+</html>

@@ -10,14 +10,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>MOVIE - VIDEOTECA</title>
+        <title>MOVIE PAGE - VIDEOTECA</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <LINK rel="stylesheet" href='style.css'> 
     </head>
-    <body>
-
-    <?php include "includes/header.php"; ?>
-   
-    <H1>MOVIE</H1>
+<body>
+<?php include "includes/header.php"; ?>
+<div class="main">   
+    <H1>MOVIE PAGE</H1>
+    
         <TABLE>
             <?php
             $img = "archive/poster/".$che_id.".jpg";
@@ -62,9 +63,8 @@
         </TABLE>
     
  <?php include "includes/links.php"; ?>
-
+</div>
+    
 <?php include "includes/footer.php"; ?>
-  </BODY>
-</HTML>
-
-
+</body>
+</html>

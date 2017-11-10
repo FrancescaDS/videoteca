@@ -1,4 +1,5 @@
 <?php
+session_start();
 //AUTOLOADER
 function myAutoloader($class_name){
     $path = 'classes/' . $class_name . '.php';
@@ -8,55 +9,13 @@ function myAutoloader($class_name){
 //register the function with PHP
 spl_autoload_register('myAutoloader');
 
-session_start();
-function UserLogIn($Username, $Password){
-    global $User;
-    if (!empty($Username) and !empty($Password))
-    {
-        $User = NULL;
-        $cheQuery ="SELECT IDUser, Username, Password FROM Users WHERE Username='" . $Username . "' AND Password='" . $Password ."'";
-        if ($result = mysqli_query(GetMyConnection(), $cheQuery)) {
-            $User = $result->fetch_assoc();
-            
-            $_SESSION['IDUser'] = $User["IDUser"];
-            $_SESSION['Username'] = $Username;
-            $_SESSION['Password'] = $Password;
-        }
-    }
-    return $User;
-}
-
-function GetUser()
-{
-    global $User;
-    if (empty($User)){
-        if (!empty($_SESSION['IDUser'])){
-            $User["IDUser"]=$_SESSION['IDUser'];
-            $User["Username"]=$_SESSION['Username'];
-            $User["Password"]=$_SESSION['Password'];
-        }
-    }
-    return $User;
-}
-
 function UserLogOut(){
-   global $User;
-   unset($User);
-   if (!empty($_SESSION['IDUser'])){
-       unset($_SESSION['IDUser']);
-   }
-   if (!empty($_SESSION['Username'])){
-       unset($_SESSION['Username']);
-   }
-   if (!empty($_SESSION['Password'])){
-       unset($_SESSION['Password']);
-   }
    if (!empty($_SESSION['logged_in'])){
-        unset($_SESSION['logged_in']);
-    }
-    if (!empty($_SESSION['user'])){
-        unset($_SESSION['user']);
-    }
+       unset($_SESSION['logged_in']);
+   }
+   if (!empty($_SESSION['user'])){
+       unset($_SESSION['user']);
+   }
 }
 
 function getAllDirectors(){

@@ -10,7 +10,7 @@
     }
     $movie = new Movie($che_id);
     
-    $error = "";
+    $msg = "";
     $done = "";
     
     if (!is_null(filter_input(INPUT_POST, 'btn_movie'))) {
@@ -27,12 +27,12 @@
                 $done = $movie->insertUpdate($title, $year);
             }
             if ($done){
-                $error = "Record inserted/updated";
+                $msg = "Record inserted/updated";
             } else {
-                $error = "Error insert/update";
+                $msg = "Error insert/update";
             }
         } else {
-            $error = "These name + year are in another record";
+            $msg = "These name + year are in another record";
         }
     }
     
@@ -46,37 +46,28 @@
         $year = "";
     }
     
+    $title = htmlentities($title, ENT_QUOTES, 'utf-8');
+    $year = htmlentities($year, ENT_QUOTES, 'utf-8');
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>MOVIE - VIDEOTECA</title>
+        <title>ADMIN MOVIE PAGE - VIDEOTECA</title>
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <script type="text/javascript" src="includes/check.js"></script>
-        <!-- Custom styles -->
-  <style>
-    #form_movie label.error {
-        color: red;
-        font-weight: bold;
-    }
-     
-    .main {
-        width: 600px;
-        margin: 0 auto;
-    }
-  </style>
+        <script type="text/javascript" src="includes/check_form.js"></script>
+        <LINK rel="stylesheet" href='style.css'> 
     </head>
-    <body>
+<body>
         
  <?php include "includes/header.php"; ?>   
         
         <div class="main">
-        <?php echo $error; ?>
-            <H1>MOVIE</H1>
+        <?php echo $msg; ?>
+        <H1>MOVIE</H1>
         <form action="admin-movie_page.php" id="form_movie" method="post">
         <INPUT type='text' name='id' hidden="true" value="<?php echo $che_id; ?>">
             <div class="form-group">
