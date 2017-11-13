@@ -76,9 +76,9 @@ $().ready(function() {
     
     
     function isPasswordPresent() {
-        alert ($('#password').val().length);
         return $('#password').val().length > 0;
     }
+    
     $("#form_update").validate({
         onfocusout: injectTrim($.validator.defaults.onfocusout),
         rules : {

@@ -117,7 +117,7 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
             
             <div class="form-group">
                 <label for="password2">Confirm password</label>
-                <input type="password" id="password" name="password2" class="form-control" value="">
+                <input type="password" name="password2" class="form-control" value="">
             </div>
 
             <div class="form-group">
@@ -148,7 +148,7 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
 
             <div class="form-group">
                 <label for="email">Password</label>
-                <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
+                <input type="password" id="password" name="password" class="form-control" value="<?php echo $password; ?>">
             </div>
             
             <div class="form-group">
