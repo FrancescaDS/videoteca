@@ -6,10 +6,11 @@ $password = "";
 $logged_in = FALSE;
 $msg ="";
 $class = "msgok";
+$the_user = new UserService();
 
 if (isset($_SESSION['logged_in'])){
-    if (!is_null(filter_input(INPUT_POST, 'btn_logout')))  {
-        UserLogOut();
+    if (!is_null(filter_input(INPUT_GET, 'logout')))  {
+        $the_user->logout();
     } else {
         $logged_in = TRUE;
     }
@@ -18,14 +19,13 @@ if (isset($_SESSION['logged_in'])){
         $email = trim(filter_input(INPUT_POST, 'email'));
         $password = trim(filter_input(INPUT_POST, 'password'));
         
-        $the_user = new UserService();
         if ($the_user->login($email, $password)){
             $msg = 'Welcome back '. $the_user->getData()['name'];
             $_SESSION['logged_in'] = true;
             $_SESSION['user'] = $the_user->getData();
             $logged_in = TRUE;
             $name = $the_user->getData()['name'];
-            $msg = 'Welcome back '. htmlentities($name, ENT_QUOTES, 'utf-8');
+            $msg = 'Hello '. htmlentities($name, ENT_QUOTES, 'utf-8');
         } else {
             $msg = 'Sorry, your credentials are invalid';
             $class = "msgerror";
@@ -70,29 +70,18 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
             </div>
 
             <div class="form-group">
-                <label for="email">Password</label>
+                <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
             </div>
-
+            
             <div class="form-group">
                 <input type="submit" name="btn_login" value="Login" class="submit" class="form-control">
             </div>
         </form>
 
-        <div>New user?</div>
-        <form action="admin-register.php" id="form_go_register" method="post">
-            <div class="form-group">
-                <input type="submit" name="btn_go_register" value="Register" class="submit" class="form-control">
-            </div>
-        </form>
+    <p><div>New user? <a href="admin-register.php">Register</a></div></p>
         
     <?php } else { ?>
-        
-        <form action="admin.php" id="form_logout" method="post">
-            <div class="form-group">
-                <input type="submit" name="btn_logout" value="Logout" class="submit" class="form-control">
-            </div>
-        </form>
         <?php include "includes/admin-links.php"; ?>
     <?php }  ?>    
     

@@ -9,15 +9,6 @@ function myAutoloader($class_name){
 //register the function with PHP
 spl_autoload_register('myAutoloader');
 
-function UserLogOut(){
-   if (!empty($_SESSION['logged_in'])){
-       unset($_SESSION['logged_in']);
-   }
-   if (!empty($_SESSION['user'])){
-       unset($_SESSION['user']);
-   }
-}
-
 function getAllDirectors(){
     return getAllPeople('dir');
 }

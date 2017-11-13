@@ -24,8 +24,9 @@ if (isset($_SESSION['logged_in'])){
     if (!is_null(filter_input(INPUT_POST, 'btn_update'))) {
         $id = $_SESSION['user']['id_user'];
         if (!$the_user->existsEmail($email, $id)){
-            if ($the_user->update($email, $name, $surname, $password)){
+            if ($the_user->update($id, $email, $name, $surname, $password)){
                 $_SESSION['user'] = $the_user->getData();
+                $password = "";
                 $msg = 'Dear '. htmlentities($name, ENT_QUOTES, 'utf-8')." your data has been updated";
             }else{
                 $msg = 'Error during the update';
@@ -47,8 +48,9 @@ if (isset($_SESSION['logged_in'])){
             if ($the_user->register($email, $password, $name, $surname)){
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user'] = $the_user->getData();
-                $msg = 'Welcome '. htmlentities($name, ENT_QUOTES, 'utf-8');
-                $logged_in = TRUE;
+                header( 'Location: admin.php' ) ;
+                //$msg = 'Welcome '. htmlentities($name, ENT_QUOTES, 'utf-8');
+                //$logged_in = TRUE;
             } else {
                 $msg = 'Error during the registration';
                 $class = "msgerror";
@@ -94,7 +96,7 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
     <?php if (!$logged_in) {?>    
         <form action="admin-register.php" id="form_register" method="post">
             <div class="form-group">
-                <label for="title">Name</label>
+                <label for="name">Name</label>
                 <input type="text" name="name" class="form-control" value="<?php echo $name; ?>">
             </div>
 
@@ -104,19 +106,27 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
             </div>
         
             <div class="form-group">
-                <label for="title">Email</label>
+                <label for="email">Email</label>
                 <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
             </div>
 
             <div class="form-group">
-                <label for="email">Password</label>
+                <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="password2">Confirm password</label>
+                <input type="password" id="password" name="password2" class="form-control" value="">
             </div>
 
             <div class="form-group">
                 <input type="submit" name="btn_register" value="Register" class="submit" class="form-control">
             </div>
         </form>
+    
+        <p><div>Have you already been registered? <a href="admin.php">Login</a></div></p>
+    
     
     <?php } else { ?>
         
@@ -140,15 +150,14 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
                 <label for="email">Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
             </div>
+            
+            <div class="form-group">
+                <label for="password2">Confirm password</label>
+                <input type="password" name="password2" class="form-control" value="">
+            </div>
 
             <div class="form-group">
                 <input type="submit" name="btn_update" value="Update" class="submit" class="form-control">
-            </div>
-        </form>
-    
-        <form action="admin.php" id="form_logout" method="post">
-            <div class="form-group">
-                <input type="submit" name="btn_logout" value="Logout" class="submit" class="form-control">
             </div>
         </form>
     

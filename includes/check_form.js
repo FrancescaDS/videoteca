@@ -57,10 +57,14 @@ $().ready(function() {
               required : true,
               minlength : 8,
               maxlength : 20
+            },
+            password2 : {
+              equalTo : "#password"
             }
         },
         messages: {
             password: "Insert a valid password, between 8 and 20 chars",
+            password2: "Password does not match confirm password",
             email: "Insert a valid email address",
             name: "Insert a valid name, max lenght 30chars",
             surname: "Insert a valid surname, max lenght 30chars"
@@ -70,6 +74,11 @@ $().ready(function() {
         }
     });
     
+    
+    function isPasswordPresent() {
+        alert ($('#password').val().length);
+        return $('#password').val().length > 0;
+    }
     $("#form_update").validate({
         onfocusout: injectTrim($.validator.defaults.onfocusout),
         rules : {
@@ -86,13 +95,19 @@ $().ready(function() {
               email : true
             },
             password : {
-              //required : true,
               minlength : 8,
               maxlength : 20
+            },
+            password2 : {
+              equalTo: {
+                    depends: isPasswordPresent,
+                    param: "#password"
+                }
             }
         },
         messages: {
             password: "Insert a valid password, between 8 and 20 chars",
+            password2: "Password does not match confirm password",
             email: "Insert a valid email address",
             name: "Insert a valid name, max lenght 30chars",
             surname: "Insert a valid surname, max lenght 30chars"

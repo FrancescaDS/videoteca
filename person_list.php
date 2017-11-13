@@ -29,15 +29,23 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
         $rows = getAllPeople($what);
         
         echo "<H3>Our DB conteins " . count($rows) . " ". $title .".</H3>";
-        echo "<table><tr><td><b>". $title ."</b></td></tr>";
+        echo "<table class='table table-hover'>
+            <thead>
+              <tr>
+                <th>Surname and name</th>
+                <th>YOB</th>
+              </tr>
+            </thead>
+            <tbody>";
 
         foreach($rows as $row){
             echo "<tr>";
             echo "<td><A href='person_page.php?id=" . $row['id_person'] . "'>" . $row['surname'] ." ". $row['name'] . "</a></td>";
+            echo "<td></td>";
             echo "<tr>";
         }
 
-        echo "</table>";
+        echo "<tbody></table>";
         
     } catch (Exception $ex) {
             echo $ex->getMessage();
