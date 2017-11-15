@@ -62,7 +62,6 @@
             
         </TABLE>
     
- <?php include "includes/links.php"; ?>
 </div>
     
 <?php include "includes/footer.php"; ?>

@@ -67,7 +67,8 @@
 <body>
         
  <?php include "includes/header.php"; ?>   
-        
+ <?php include "includes/admin-top.php"; ?>   
+    
         <div class="main">
         <H1>MOVIE</H1>
         

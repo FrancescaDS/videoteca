@@ -1,1 +1,5 @@
-<div class="film"></div>
+<footer class="footer">
+    <div class="film">
+        <span></span>
+    </div>
+</footer>

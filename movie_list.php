@@ -23,7 +23,7 @@ require_once 'functions/functions.php';
     try {
         $rows = getAllMovies();
         
-        echo "<H3>Our DB conteins " . count($rows) . " movies.</H3>";
+        echo "<H3>Our DB contains " . count($rows) . " movies.</H3>";
         echo "<table class='table table-hover'>
             <thead>
               <tr>
@@ -47,7 +47,6 @@ require_once 'functions/functions.php';
 
 ?>
 
-    <?php include "includes/links.php"; ?>
 </div>
     
 <?php include "includes/footer.php"; ?>

@@ -24,15 +24,13 @@ function getAllPeople($what){
     $connection_object = $db->mysql;
     try {
         $result = [];
+        $sql = "SELECT DISTINCT people.id_person, name, surname, dob FROM people ";
         if ($what === 'dir'){
-            $sql = "SELECT DISTINCT people.id_person, people.name, people.surname FROM people "
-                . "INNER JOIN directors ON directors.id_person = people.id_person "
-                . "ORDER BY people.surname, people.name";
+            $sql = $sql . "INNER JOIN directors ON directors.id_person = people.id_person ";
         } else {
-            $sql = "SELECT DISTINCT people.id_person, people.name, people.surname FROM people "
-                . "INNER JOIN actors ON actors.id_person = people.id_person "
-                . "ORDER BY people.surname, people.name";
+            $sql = $sql . "INNER JOIN actors ON actors.id_person = people.id_person "; 
         }
+        $sql = $sql . "ORDER BY people.surname, people.name";
         $stat = $connection_object->prepare($sql);
         $stat->execute();
         if ($stat->rowCount() >= 1) {

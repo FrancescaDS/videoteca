@@ -12,7 +12,6 @@
 <div class="main">   
     <H1>VIDEOTECA</H1> 
 
-    <?php include "includes/links.php"; ?>
 </div>
     
 <?php include "includes/footer.php"; ?>

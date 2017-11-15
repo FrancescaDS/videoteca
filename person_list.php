@@ -28,12 +28,12 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
     try {
         $rows = getAllPeople($what);
         
-        echo "<H3>Our DB conteins " . count($rows) . " ". $title .".</H3>";
+        echo "<H3>Our DB contains " . count($rows) . " ". $title .".</H3>";
         echo "<table class='table table-hover'>
             <thead>
               <tr>
                 <th>Surname and name</th>
-                <th>YOB</th>
+                <th>Date of birth</th>
               </tr>
             </thead>
             <tbody>";
@@ -41,7 +41,8 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
         foreach($rows as $row){
             echo "<tr>";
             echo "<td><A href='person_page.php?id=" . $row['id_person'] . "'>" . $row['surname'] ." ". $row['name'] . "</a></td>";
-            echo "<td></td>";
+            $dob = new DateTime($row['dob']);
+            echo "<td>" . $dob->format('j F Y') ."</td>";
             echo "<tr>";
         }
 
@@ -53,7 +54,6 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
 
 ?>
 
- <?php include "includes/links.php"; ?>
 </div>
     
 <?php include "includes/footer.php"; ?>

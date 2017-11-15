@@ -52,6 +52,10 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
     
 <?php include "includes/header.php"; ?>   
 
+    <?php if($logged_in) {
+        include "includes/admin-top.php";
+    }?>
+    
 <div class="main">
     
     <H1>ADMIN</H1>

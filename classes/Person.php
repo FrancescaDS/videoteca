@@ -2,7 +2,7 @@
 
 class Person{
     //data[] = array where keys are names of fields
-    //id_person, name, surname
+    //id_person, name, surname, dob
     protected $data = [];
     
     protected $connection_object;
