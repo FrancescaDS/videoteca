@@ -89,6 +89,7 @@ label.error {
     display:table-cell; 
     vertical-align: middle;
     padding-right:10px;
+    width: 100px;
 }
 
 .sbox_dx{

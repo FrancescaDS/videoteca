@@ -10,13 +10,13 @@
     $dod_string = "";
     $dod = new DateTime($person->getData()['dod']);
         if ($dod > $dob){
-           $dod_string = $dod->format('j F Y');
+           $dod_string = $dod->format('jS F Y');
         } else {
        $today = new DateTime(date("Y-m-d"));
        $differ = $dob->diff($today);
        $age = $differ->y;
      }
-     $born_string = "<b>Born</b> " . $dob->format('j F Y');
+     $born_string = "<b>Born</b> " . $dob->format('jS F Y');
      if (isset($age)){
         $born_string = $born_string . " (age ". $age . ")";
      }
@@ -45,13 +45,7 @@
         <?php
     $img = "archive/people/".$che_id.".jpg";
     if (is_file($img)){ 
-        echo "<div class='pic'>"
-       . "<img src='".$img."'>"
-       
-        //. "<figure class='figure'>"
-        //. "<img src='".$img."' class='figure-img img-fluid rounded' alt='A generic square placeholder image with rounded corners in a figure.'>"
-        //. "</figure>"
-        . "</div>";
+        echo "<div class='pic'><img src='".$img."'></div>";
      } 
      
      ?>

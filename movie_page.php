@@ -4,63 +4,76 @@
     $che_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     $movie = new Movie($che_id);
+    $title = htmlentities($movie->getData()['title'], ENT_QUOTES, 'utf-8');
+    
+    
+    
+    
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>MOVIE PAGE - VIDEOTECA</title>
+        <title><?php echo $title; ?> - VIDEOTECA</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <LINK rel="stylesheet" href='style.css'> 
     </head>
 <body>
 <?php include "includes/header.php"; ?>
-<div class="main">   
-    <H1>MOVIE PAGE</H1>
+    <div class="main">   
+    <H1><?php echo strtoupper($title); ?></H1>
     
-        <TABLE>
-            <?php
-            $img = "archive/poster/".$che_id.".jpg";
-            if (is_file($img)){ 
-                echo "<tr><td colspan='2'><img src='".$img."'></td></tr>";
-            } ?>
-            <TR><TD class='newp'>Title</TD>
-                <TD><?php echo $movie->getData()['title']; ?></TD></TR> 
-            <TR><TD class='newp'>Year</TD>
-                <TD><?php echo $movie->getData()['year']; ?></TD</TR> 
-            
-            <?php
+    <div class="container_page">
+        <?php
+    $img = "archive/movies/".$che_id.".jpg";
+    if (is_file($img)){ 
+        echo "<div class='pic'><img src='".$img."'></div>";
+     } 
+     
+     ?>
+        <div class="container_dx">
+            <div class="bbox_dx">
+                <div class="text_dx"><?php echo $title; ?>, (<?php echo $movie->getData()['year']; ?>)</div>
+                
+                <?php
                 $list = $movie->getDirectors();
                 if (!empty($list)){ ?>
-            <TR><TD class='newp'>Director/s</TD>
-                <TD>
-                <?php 
-                foreach ($list as $row) {
-                    echo "<a href='person_page.php?id=" . $row['id_person'] . "'>" . $row['name'] ." ".$row['surname']."</A><br>";
-                }
-                ?>    
-               </TD></TR>
-            
-            <?php
-                }
+                <div class="box_dx">
+                    <div class="sbox_sx"><b>Director/s</b></div>
+                    <div class="sbox_dx">
+                    <?php
+                    foreach ($list as $row) {
+                        echo "<a href='person_page.php?id=" . $row['id_person'] . "'>"
+                            . htmlentities($row['name'], ENT_QUOTES, 'utf-8') ." "
+                            . htmlentities($row['surname'], ENT_QUOTES, 'utf-8') ."</A><br>";
+                    } ?>
+                    </div>
+                </div>
+                <?php } ?>
+                <br>
+                <?php
                 $list = $movie->getActors();
                 if (!empty($list)){ ?>
-            <TR><TD class='newp'>Cast</TD>
-                <TD>
-                <?php 
-                foreach ($list as $row) {
-                    echo "<a href='person_page.php?id=" . $row['id_person'] . "'>" . $row['name'] ." ".$row['surname']."</A> as " . $row['character_name'] . "<br>";
-                }
-                ?>    
-               </TD></TR>
+                <div class="box_dx">
+                    <div class="sbox_sx"><b>Stars</b></div>
+                    <div class="sbox_dx">
+                    <?php
+                    foreach ($list as $row) {
+                        echo "<a href='person_page.php?id=" . $row['id_person'] . "'>"
+                            . htmlentities($row['name'], ENT_QUOTES, 'utf-8') ." "
+                            . htmlentities($row['surname'], ENT_QUOTES, 'utf-8') ."</A>"
+                            . " as " . htmlentities($row['character_name'], ENT_QUOTES, 'utf-8') . "<br>";
+                    } ?>
+                    </div>
+                </div>
+                <?php } ?>
             
-            <?php
-                }
-            ?>
-       
-            
-        </TABLE>
+            </div>        
+        </div>
+    
+    </div>
+    <div style="clear:both;"></div>
     
 </div>
     
