@@ -9,17 +9,17 @@ function myAutoloader($class_name){
 //register the function with PHP
 spl_autoload_register('myAutoloader');
 
-function getAllDirectors(){
-    return getAllPeople('dir');
+function getAllDirectors($limit_from = 0, $res_per_page = 0){
+    return getAllPeople('dir', $limit_from, $res_per_page);
 }
 
-function getAllActors(){
-    return getAllPeople('act');
+function getAllActors($limit_from = 0, $res_per_page = 0){
+    return getAllPeople('act', $limit_from, $res_per_page);
 }
 
 
-//return an array of person objects
-function getAllPeople($what){
+//return an array
+function getAllPeople($what, $limit_from=0, $res_per_page=0){
     $db = new Mydb();
     $connection_object = $db->mysql;
     try {
@@ -31,6 +31,9 @@ function getAllPeople($what){
             $sql = $sql . "INNER JOIN actors ON actors.id_person = people.id_person "; 
         }
         $sql = $sql . "ORDER BY people.surname, people.name";
+        if ($res_per_page>0){
+            $sql = $sql . " LIMIT $limit_from, $res_per_page";
+        }
         $stat = $connection_object->prepare($sql);
         $stat->execute();
         if ($stat->rowCount() >= 1) {
@@ -42,14 +45,18 @@ function getAllPeople($what){
     }    
 }
 
+
 //return an array
-function getAllMovies(){
+function getAllMovies($limit_from = 0, $res_per_page = 0){
     $db = new Mydb();
     $connection_object = $db->mysql;
     try {
         $result = [];
         $sql = "SELECT * FROM movies "
-            . "ORDER BY movies.year, movies.title";
+            . "ORDER BY movies.year, movies.title ";
+        if ($res_per_page>0){
+            $sql = $sql . " LIMIT $limit_from, $res_per_page";
+        } 
         $stat = $connection_object->prepare($sql);
         $stat->execute();
         $result = $stat;
@@ -60,6 +67,33 @@ function getAllMovies(){
     } catch (Exception $ex) {
         exit($ex->getMessage());
     }    
+}
+
+function getPagination($rows){
+    $res_per_page = 5;
+    $tot_res = count($rows);
+    $num_pages = ceil($tot_res/$res_per_page);
+    if (!isset($_GET['page'])){
+        $present_page = 1;
+    } else {
+        $present_page = trim(filter_input(INPUT_GET, 'page'));
+        if ((!is_numeric($present_page)) || ($present_page>$num_pages) || ($present_page<1)){
+            $present_page = 1;
+        }
+    }
+    $limit_from = ($present_page-1)*$res_per_page;
+    $previous_page = $present_page-1;
+    $next_page = $present_page+1;
+    $result = [
+        'tot_res' => $tot_res,
+        'num_pages' => $num_pages,
+        'present_page' => $present_page,
+        'previous_page' => $previous_page,
+        'next_page' => $next_page,
+        'limit_from' => $limit_from,
+        'res_per_page' => $res_per_page
+    ];
+    return $result;
 }
 
 

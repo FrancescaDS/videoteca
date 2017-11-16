@@ -1,7 +1,10 @@
 <?php
-header('Content-type: text/html;charset=utf-8');
-require_once 'functions/functions.php';
-
+    header('Content-type: text/html;charset=utf-8');
+    require_once 'functions/functions.php';
+    
+    $rows = getAllMovies();
+    $pagination = getPagination($rows);
+    $rows = getAllMovies($pagination['limit_from'], $pagination['res_per_page']);
 ?>
 
 <!DOCTYPE html>
@@ -15,16 +18,15 @@ require_once 'functions/functions.php';
         
     </head>
 <body>
-<?php include "includes/header.php"; ?>
+    <?php include "includes/header.php"; ?>
 <div class="main">   
     <H1>MOVIES</H1> 
-      
+    
 <?php
     try {
-        $rows = getAllMovies();
         
-        echo "<H3>Our DB contains " . count($rows) . " movies.</H3>";
-        echo "<table class='table table-hover'>
+        echo "<H3>Our DB contains " . $pagination['tot_res'] . " movies.</H3>"
+            ."<table class='table table-hover'>
             <thead>
               <tr>
                 <th>Title</th>
@@ -34,9 +36,11 @@ require_once 'functions/functions.php';
             <tbody>";
 
         foreach($rows as $row){
-            echo "<tr>";
-            echo "<td><A href='movie_page.php?id=" . $row['id_movie'] . "'>" . htmlentities($row['title'], ENT_QUOTES, 'utf-8') . " </a></td><td>". $row['year'] . "</td>";
-            echo "<tr>";
+            echo "<tr>"
+            . "<td><A href='movie_page.php?id=" . $row['id_movie'] . "'>"
+            . htmlentities($row['title'], ENT_QUOTES, 'utf-8') . " </a></td>
+            <td>". $row['year'] . "</td>
+            <tr>";
         }
 
         echo "<tbody></table>";
@@ -47,6 +51,9 @@ require_once 'functions/functions.php';
 
 ?>
 
+    
+    <?php include "includes/pagination.php"; ?>
+    
 </div>
     
 <?php include "includes/footer.php"; ?>

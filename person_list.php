@@ -1,14 +1,16 @@
 <?php
-require_once 'functions/functions.php';
+    require_once 'functions/functions.php';
 
-if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
-    $what = "dir";
-    $title = "Directors";
-}else{
-    $what = "act";
-    $title = "Actors/Acteresses";
-}
-
+    if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
+        $what = "dir";
+        $title = "Directors";
+    }else{
+        $what = "act";
+        $title = "Actors/Acteresses";
+    }
+    $rows = getAllPeople($what);
+    $pagination = getPagination($rows);
+    $rows = getAllPeople($what, $pagination['limit_from'], $pagination['res_per_page']);
 ?>
 
 <!DOCTYPE html>
@@ -26,9 +28,7 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
     
 <?php
     try {
-        $rows = getAllPeople($what);
-        
-        echo "<H3>Our DB contains " . count($rows) . " ". $title .".</H3>";
+        echo "<H3>Our DB contains " . $pagination['tot_res'] . " ". $title .".</H3>";
         echo "<table class='table table-hover'>
             <thead>
               <tr>
@@ -40,7 +40,7 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
 
         foreach($rows as $row){
             echo "<tr>";
-            echo "<td><A href='person_page.php?id=" . $row['id_person'] . "'>" . $row['surname'] ." ". $row['name'] . "</a></td>";
+            echo "<td><A href='person_page.php?id=" . $row['id_person'] . "'>" . htmlentities($row['name'], ENT_QUOTES, 'utf-8')  ." ". htmlentities($row['surname'], ENT_QUOTES, 'utf-8')  . "</a></td>";
             $dob = new DateTime($row['dob']);
             echo "<td>" . $dob->format('j F Y') ."</td>";
             echo "<tr>";
@@ -54,6 +54,7 @@ if ((string)filter_input(INPUT_GET, 'what') === 'dir'){
 
 ?>
 
+    <?php include "includes/pagination.php"; ?>
 </div>
     
 <?php include "includes/footer.php"; ?>
