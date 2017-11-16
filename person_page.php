@@ -20,7 +20,7 @@
      if (isset($age)){
         $born_string = $born_string . " (age ". $age . ")";
      }
-     $born_string = $born_string . ", " . htmlentities($person->getData()['place'], ENT_QUOTES, 'utf-8');
+     $born_string = $born_string . ",<br>in " . htmlentities($person->getData()['place'], ENT_QUOTES, 'utf-8');
      if ($dod_string <> ""){
         $born_string = $born_string . "<br><b>Die</b> ".$dod_string ;
      }
@@ -41,50 +41,49 @@
     <div class="main">   
     <H1><?php echo strtoupper($name); ?> <?php echo strtoupper($surname); ?></H1>
     
-    <div style="clear:both;">
+    <div class="container_page">
         <?php
     $img = "archive/people/".$che_id.".jpg";
     if (is_file($img)){ 
-        echo "<div class='box'>"
-        . "<figure class='figure'>"
-        . "<img src='".$img."' class='figure-img img-fluid rounded' alt='A generic square placeholder image with rounded corners in a figure.'>"
-        //. "<figcaption class='figure-caption'>A caption for the above image.</figcaption>"
-        . "</figure>"
+        echo "<div class='pic'>"
+       . "<img src='".$img."'>"
+       
+        //. "<figure class='figure'>"
+        //. "<img src='".$img."' class='figure-img img-fluid rounded' alt='A generic square placeholder image with rounded corners in a figure.'>"
+        //. "</figure>"
         . "</div>";
      } 
      
      ?>
-            <div class="box"><?php echo $born_string; ?></div>        
-    
+        <div class="container_dx">
+            <div class="bbox_dx">
+                <div class="text_dx"><?php echo $born_string; ?></div>
+                <div class="box_dx">
+                    <div class="sbox_sx"><b>Filmography</b></div>
+                    <div class="sbox_dx">
+                    <?php
+                        $list = $person->getDirectedMovies();
+                        if (!empty($list)){ 
+                            echo "<b>Director</b><br>";
+                            foreach ($list as $row) {
+                                echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A> (".$row['year'].")<br>";
+                            }
+                            echo "<br>";
+                        }
+                        $list = $person->getPlayedMovies();
+                        if (!empty($list)){ 
+                            echo "<b>Actor/Actress</b><br>"; 
+                            foreach ($list as $row) {
+                                echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A>  (".$row['year'].") as " . $row['character_name'] . "<br>";
+                            }
+                        } ?>
+                    </div>
+                </div>
+            </div>        
+        </div>
     
     </div>
     <div style="clear:both;"></div>
-    <TABLE>   
-            
-            
-            
-            
-            <tr><td colspan="2"><b>Filmography</b></td></tr>
-            <?php
-                $list = $person->getDirectedMovies();
-                if (!empty($list)){ 
-                    echo "<TR><TD class='newp'>Director</TD>"
-                    . "<TD>";
-                    foreach ($list as $row) {
-                        echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A> (".$row['year'].")<br>";
-                    }
-                    echo "</TD></TR>";
-                }
-                $list = $person->getPlayedMovies();
-                if (!empty($list)){ echo "<TR><TD class='newp'>Actor/Actress</TD>"
-                    . "<TD>"; 
-                foreach ($list as $row) {
-                    echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A>  (".$row['year'].") as " . $row['character_name'] . "<br>";
-                }
-                echo "</TD></TR>";
-                }
-            ?>
-        </TABLE>
     
 </div>
     
