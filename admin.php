@@ -86,6 +86,7 @@ $password = htmlentities($password, ENT_QUOTES, 'utf-8');
     <p><div>New user? <a href="admin-register.php">Register</a></div></p>
         
     <?php } else { ?>
+        <img src='img/movie-reel.jpg'>
         <?php include "includes/admin-links.php"; ?>
     <?php }  ?>    
     

@@ -34,7 +34,7 @@
                 $class = "msgerror";
             }
         } else {
-            $msg = "These name + year are in another record";
+            $msg = "This movie (title+year) is already present in our db";
             $class = "msgerror";
         }
     }
@@ -65,39 +65,39 @@
         <LINK rel="stylesheet" href='style.css'> 
     </head>
 <body>
-        
+
  <?php include "includes/header.php"; ?>   
  <?php include "includes/admin-top.php"; ?>   
     
-        <div class="main">
-        <H1>MOVIE</H1>
+  <div class="main">
+    <H1>MOVIE</H1>
         
     <?php if ($msg<>""){ ; ?>
     <div class="<?php echo $class; ?>">
     <?php echo $msg; ?>
     </div>
     <?php } ?>
-        
+    
         <form action="admin-movie_page.php" id="form_movie" method="post">
-        <INPUT type='text' name='id' hidden="true" value="<?php echo $che_id; ?>">
-            <div class="form-group">
-          <label for="title">Title</label>
+          <INPUT type='text' name='id' hidden="true" value="<?php echo $che_id; ?>">
+          <div class="form-group">
+            <label for="title">Title</label>
           <input type="text" name="title" class="form-control" value="<?php echo $title; ?>">
-        </div>
+          </div>
 
-        <div class="form-group">
-          <label for="email">Year</label>
-          <input type="text" name="year" class="form-control" value="<?php echo $year; ?>">
-        </div>
+          <div class="form-group">
+            <label for="email">Year</label>
+            <input type="text" name="year" class="form-control" value="<?php echo $year; ?>">
+          </div>
 
-        <div class="form-group">
-          <input type="submit" name="btn_movie" value="Insert/Update" class="submit" class="form-control">
-        </div>
-      </form>
+          <div class="form-group">
+            <input type="submit" name="btn_movie" value="Insert/Update" class="submit" class="form-control">
+          </div>
+        </form>
         
-          <?php include "includes/links.php"; ?>
-        </div>
+        <?php include "includes/admin-links.php"; ?>
+    </div>
         
     <?php include "includes/footer.php"; ?>
-  </BODY>
-</HTML>
+</body>
+</html>

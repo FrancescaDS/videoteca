@@ -11,7 +11,7 @@
 <?php include "includes/header.php"; ?>
 <div class="main">   
     <H1>VIDEOTECA</H1> 
-
+    <img src='img/movie-reel.jpg'>
 </div>
     
 <?php include "includes/footer.php"; ?>
