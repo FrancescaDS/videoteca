@@ -94,6 +94,19 @@
             <input type="submit" name="btn_movie" value="Insert/Update" class="submit" class="form-control">
           </div>
         </form>
+    
+    <?php
+    if ($che_id<>0){
+        echo 'director/s list + cancel<br>';
+        echo 'director/s add new<br>';
+        echo 'cast list + cancel<br>';
+        echo 'cast add new<br>';
+        $img = "archive/movies/".$che_id.".jpg";
+        if (is_file($img)){ 
+            echo "<div class='pic'><img src='".$img."'></div>";
+        }
+    }
+    ?>
         
         <?php include "includes/admin-links.php"; ?>
     </div>
