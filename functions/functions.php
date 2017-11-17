@@ -17,6 +17,9 @@ function getAllActors($limit_from = 0, $res_per_page = 0){
     return getAllPeople('act', $limit_from, $res_per_page);
 }
 
+function getAllPeopleAll($limit_from = 0, $res_per_page = 0){
+    return getAllPeople('', $limit_from, $res_per_page);
+}
 
 //return an array
 function getAllPeople($what, $limit_from=0, $res_per_page=0){
@@ -27,7 +30,7 @@ function getAllPeople($what, $limit_from=0, $res_per_page=0){
         $sql = "SELECT DISTINCT people.id_person, name, surname, dob FROM people ";
         if ($what === 'dir'){
             $sql = $sql . "INNER JOIN directors ON directors.id_person = people.id_person ";
-        } else {
+        } elseif ($what === 'act'){
             $sql = $sql . "INNER JOIN actors ON actors.id_person = people.id_person "; 
         }
         $sql = $sql . "ORDER BY people.surname, people.name";

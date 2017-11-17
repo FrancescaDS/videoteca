@@ -1,13 +1,10 @@
-<?php
+<?php   
     require_once 'functions/functions.php';
     
     $che_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     $movie = new Movie($che_id);
-    $title = htmlentities($movie->getData()['title'], ENT_QUOTES, 'utf-8');
-    
-    
-    
+    $title = htmlentities($movie->getData()['title'], ENT_QUOTES, 'utf-8');    
     
 ?>
 
