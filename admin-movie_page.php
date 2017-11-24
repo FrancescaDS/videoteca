@@ -39,6 +39,15 @@
         }
     }
     
+    if (!is_null(filter_input(INPUT_POST, 'btn_image'))){
+        $result = uploadImage($che_id, 'movies');
+        $msg = $result[1];
+        if ($result[0] == false){
+            $class = "msgerror";
+        }
+    }
+    
+    
     if (isset($movie->getData()['id_movie'])){
         $che_id = $movie->getData()['id_movie'];
         $title = $movie->getData()['title'];
@@ -79,7 +88,7 @@
     <?php } ?>
     
         <form action="admin-movie_page.php" id="form_movie" method="post">
-          <INPUT type='text' name='id' hidden="true" value="<?php echo $che_id; ?>">
+            <input type='hidden' name='id' value="<?php echo $che_id; ?>">
           <div class="form-group">
             <label for="title">Title</label>
           <input type="text" name="title" class="form-control" value="<?php echo $title; ?>">
@@ -91,7 +100,7 @@
           </div>
 
           <div class="form-group">
-            <input type="submit" name="btn_movie" value="Insert/Update" class="submit" class="form-control">
+            <input type="submit" name="btn_movie" value="Insert/Update movie" class="submit">
           </div>
         </form>
     
@@ -101,13 +110,33 @@
         echo 'director/s add new<br>';
         echo 'cast list + cancel<br>';
         echo 'cast add new<br>';
+        
+        //Poster start
+        echo '<div class="container_page" >';
         $img = "archive/movies/".$che_id.".jpg";
         if (is_file($img)){ 
             echo "<div class='pic'><img src='".$img."'></div>";
-        }
+        } ?>
+        
+            <div class='box_dx_top'>
+                <form enctype="multipart/form-data" action="admin-movie_page.php" id="form_image" method="post">
+                    <input type='hidden' name='id' value="<?php echo $che_id; ?>">
+                    <div class="form-group">
+                        <label for="poster">New poster</label>
+                        <input name="image" type="file" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="btn_image" value="Upload new poster" class="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    <?php   
     }
     ?>
         
+
         <?php include "includes/admin-links.php"; ?>
     </div>
         

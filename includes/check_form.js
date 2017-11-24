@@ -137,5 +137,19 @@ $().ready(function() {
         }
     });
     
+    $("#form_image").validate({
+        rules : {
+            image : {
+              required : true
+            }
+        },
+        messages: {
+            image: "Insert a valid image file .jpg"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    
     
 });

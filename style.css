@@ -100,6 +100,14 @@ label.error {
     border-left: 1px #CCC solid;
     padding-left:10px;
 }
+.box_dx_top{
+    display: inline-block;
+    display:table-cell; 
+    vertical-align: top;
+    border-top: 1px #CCC solid;
+    padding-left:10px;
+    padding-top:10px;
+}
 
 div.pic{
     display: inline-block; 
