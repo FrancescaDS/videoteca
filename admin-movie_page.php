@@ -111,7 +111,7 @@
         echo 'cast list + cancel<br>';
         echo 'cast add new<br>';
         
-        //Poster start
+        //Poster
         echo '<div class="container_page" >';
         $img = "archive/movies/".$che_id.".jpg";
         if (is_file($img)){ 

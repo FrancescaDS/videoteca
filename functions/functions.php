@@ -144,3 +144,4 @@ function resizeImage($imagePath, $newImage, $width, $height) {
     $img->resize($width, $height, true);
     $img->saveImage($newImage);
 }
+

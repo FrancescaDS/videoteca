@@ -9,6 +9,7 @@
  * @version 0.9.6
  *
  */
+
 class SmartImage {
     /**
      * Source file (path)
