@@ -164,5 +164,39 @@ class Movie{
         }
     }
     
+    public function insertDirector($id_person){
+        try{
+            $id_movie = $this->data['id_movie'];
+            $sql = "SELECT * FROM directors "
+                . "WHERE id_movie=".$id_movie." AND id_person=".$id_person;
+            $stat = $this->connection_object->prepare($sql);
+            $stat->execute();
+            if ($stat->rowCount() === 0) {
+                $sql = "INSERT INTO directors (id_movie, id_person) "
+                    . "VALUES (".$id_movie.",".$id_person.")";
+                $stat = $this->connection_object->prepare($sql);
+                $result = $stat->execute();
+            } else{
+                $result = false;
+            }
+            return $result;
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
+    
+    public function deleteDirector($id_person){
+        try{
+            $id_movie = $this->data['id_movie'];
+            $sql = "DELETE FROM directors WHERE "
+                . "id_movie=".$id_movie." AND id_person=".$id_person;
+            $stat = $this->connection_object->prepare($sql);
+            $result = $stat->execute();
+            return $result;
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
+    
 }
 

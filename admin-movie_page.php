@@ -37,13 +37,29 @@
             $msg = "This movie (title+year) is already present in our db";
             $class = "msgerror";
         }
-    }
-    
-    if (!is_null(filter_input(INPUT_POST, 'btn_image'))){
+    }elseif (!is_null(filter_input(INPUT_POST, 'btn_image'))){
         $result = uploadImage($che_id, 'movies');
         $msg = $result[1];
-        if ($result[0] == false){
+        if (!$result[0]){
             $class = "msgerror";
+        }
+    }elseif (!is_null(filter_input(INPUT_POST, 'btn_newdirector'))) {
+        $id_newdirector = filter_input(INPUT_POST, 'newdirector', FILTER_VALIDATE_INT);
+        $result = $movie->insertDirector($id_newdirector);
+        if (!$result){
+            $msg = "Movie not updated: problem with new director";
+            $class = "msgerror";
+        }else{
+            $msg = "Movie updated with new director";
+        }
+    }elseif (!is_null(filter_input(INPUT_POST, 'btn_deldirector'))) {
+        $id_deldirector = filter_input(INPUT_POST, 'deldirector', FILTER_VALIDATE_INT);
+        $result = $movie->deleteDirector($id_deldirector);
+        if (!$result){
+            $msg = "Movie not updated: problem with del director";
+            $class = "msgerror";
+        }else{
+            $msg = "Movie updated deleted director";
         }
     }
     
@@ -105,9 +121,55 @@
         </form>
     
     <?php
-    if ($che_id<>0){
-        echo 'director/s list + cancel<br>';
-        echo 'director/s add new<br>';
+    if ($che_id<>0){ ?>
+    
+    
+        <div class="container_page" >
+            <div class='sbox_sx'><b>Director/s</b></div>
+            <div class='sbox_dx'>
+                <?php 
+                //director/s already linked to the movie
+                $rows = $movie->getDirectors();
+                if (count($rows) > 0){
+                    echo '<div class="form-group">';
+                    foreach ($rows as $row) {
+                        $who = htmlentities($row['name'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['surname'], ENT_QUOTES, 'utf-8');
+                        ?>
+                        <form action="admin-movie_page.php" id="form_deldirector" method="post">
+                            <input type='hidden' name='id' value="<?php echo $che_id; ?>">
+                            <input type='hidden' name='deldirector' value="<?php echo $row['id_person']; ?>">
+                            <?php echo $who;?>
+                            <input type="submit" name="btn_deldirector" value="Delete director" class="submit">
+                            <br>
+                        </form>
+                        <?php
+                    }
+                    echo '</div>';
+                }
+                // new director to insert ?>
+                <form action="admin-movie_page.php" id="form_newdirector" method="post">
+                <input type='hidden' name='id' value="<?php echo $che_id; ?>">
+                <div class="form-group">
+                    <label for="director">New director</label>
+                    <?php $rows = $movie->getDirectorsNot() ?>
+                    <select class="form-control" id="newdirector" name="newdirector">
+                        <option value="0">Select the new director</option>
+                        <?php foreach($rows as $row){
+                            $who = htmlentities($row['name'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['surname'], ENT_QUOTES, 'utf-8');
+                            echo '<option value="'.$row['id_person'].'">'.$who.'</option>';
+                            } ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="btn_newdirector" value="Insert new director" class="submit">
+                </div>
+            </form>
+            </div>
+            
+        </div>
+        
+        
+    <?php
         echo 'cast list + cancel<br>';
         echo 'cast add new<br>';
         

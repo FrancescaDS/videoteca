@@ -151,4 +151,18 @@ $().ready(function() {
         }
     });
     
+    $("#form_newdirector").validate({
+        rules : {
+            newdirector : {
+              min : 1
+            }
+        },
+        messages: {
+            newdirector: "Select the new director from the list"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    
 });
