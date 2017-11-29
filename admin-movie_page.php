@@ -16,7 +16,7 @@
     
     if (!is_null(filter_input(INPUT_POST, 'btn_movie'))) {
         $title = filter_input(INPUT_POST, 'title');
-        $year = filter_input(INPUT_POST, 'year');
+        $year = filter_input(INPUT_POST, 'year', FILTER_VALIDATE_INT);
         if ($movie->isUnique($title, $year)){
             $data = [
                 'title' => $title,
@@ -47,19 +47,38 @@
         $id_newdirector = filter_input(INPUT_POST, 'newdirector', FILTER_VALIDATE_INT);
         $result = $movie->insertDirector($id_newdirector);
         if (!$result){
-            $msg = "Movie not updated: problem with new director";
+            $msg = "Movie not updated: cannot insert new director";
             $class = "msgerror";
         }else{
-            $msg = "Movie updated with new director";
+            $msg = "Movie updated: director inserted";
         }
     }elseif (!is_null(filter_input(INPUT_POST, 'btn_deldirector'))) {
         $id_deldirector = filter_input(INPUT_POST, 'deldirector', FILTER_VALIDATE_INT);
         $result = $movie->deleteDirector($id_deldirector);
         if (!$result){
-            $msg = "Movie not updated: problem with del director";
+            $msg = "Movie not updated: cannot delete director";
             $class = "msgerror";
         }else{
-            $msg = "Movie updated deleted director";
+            $msg = "Movie updated: director deleted";
+        }
+    }elseif (!is_null(filter_input(INPUT_POST, 'btn_newactor'))) {
+        $id_newactor = filter_input(INPUT_POST, 'newactor', FILTER_VALIDATE_INT);
+        $character_name = filter_input(INPUT_POST, 'character_name');
+        $result = $movie->insertActor($id_newactor, $character_name);
+        if (!$result){
+            $msg = "Movie not updated: cannot insert new star";
+            $class = "msgerror";
+        }else{
+            $msg = "Movie updated: star inserted";
+        }
+    }elseif (!is_null(filter_input(INPUT_POST, 'btn_delactor'))) {
+        $id_delactor = filter_input(INPUT_POST, 'delactor', FILTER_VALIDATE_INT);
+        $result = $movie->deleteActor($id_delactor);
+        if (!$result){
+            $msg = "Movie not updated: cannot delete star";
+            $class = "msgerror";
+        }else{
+            $msg = "Movie updated: star deleted";
         }
     }
     
@@ -111,7 +130,7 @@
           </div>
 
           <div class="form-group">
-            <label for="email">Year</label>
+            <label for="year">Year</label>
             <input type="text" name="year" class="form-control" value="<?php echo $year; ?>">
           </div>
 
@@ -120,66 +139,105 @@
           </div>
         </form>
     
+    <!-- DIRECTOR-CAST-POSTER ONLY ID THE MOVIE HAS A RECORD -->
     <?php
     if ($che_id<>0){ ?>
-    
-    
-        <div class="container_page" >
+        
+        <!-- DIRECTOR/S START -->
+        <div class="container_border">
             <div class='sbox_sx'><b>Director/s</b></div>
             <div class='sbox_dx'>
-                <?php 
-                //director/s already linked to the movie
-                $rows = $movie->getDirectors();
+                <!-- director/s already associated with the movie -->
+                <?php $rows = $movie->getDirectors();
                 if (count($rows) > 0){
                     echo '<div class="form-group">';
                     foreach ($rows as $row) {
                         $who = htmlentities($row['name'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['surname'], ENT_QUOTES, 'utf-8');
-                        ?>
+                        $who = '<a href="admin-person_page.php?id='.$row['id_person'].'">'.$who.'</a>'; ?>
                         <form action="admin-movie_page.php" id="form_deldirector" method="post">
                             <input type='hidden' name='id' value="<?php echo $che_id; ?>">
                             <input type='hidden' name='deldirector' value="<?php echo $row['id_person']; ?>">
+                            <input type="submit" name="btn_deldirector" value="Del" class="submit">&nbsp;
                             <?php echo $who;?>
-                            <input type="submit" name="btn_deldirector" value="Delete director" class="submit">
                             <br>
                         </form>
-                        <?php
+                    <?php
                     }
                     echo '</div>';
-                }
-                // new director to insert ?>
+                } ?>
+                <!-- new director to insert -->
                 <form action="admin-movie_page.php" id="form_newdirector" method="post">
                 <input type='hidden' name='id' value="<?php echo $che_id; ?>">
                 <div class="form-group">
-                    <label for="director">New director</label>
+                    <label for="newdirector">New director</label><br>
                     <?php $rows = $movie->getDirectorsNot() ?>
-                    <select class="form-control" id="newdirector" name="newdirector">
+                    <select id="newdirector" name="newdirector">
                         <option value="0">Select the new director</option>
                         <?php foreach($rows as $row){
-                            $who = htmlentities($row['name'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['surname'], ENT_QUOTES, 'utf-8');
+                            $who = htmlentities($row['surname'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['name'], ENT_QUOTES, 'utf-8');
                             echo '<option value="'.$row['id_person'].'">'.$who.'</option>';
                             } ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="submit" name="btn_newdirector" value="Insert new director" class="submit">
+                    </select>&nbsp;
+                    <input type="submit" name="btn_newdirector" value="Insert new director">
                 </div>
             </form>
             </div>
-            
         </div>
+        <!-- DIRECTOR/S END-->
         
+        <!-- CAST START-->
+            <div class="container_border">
+            <div class='sbox_sx'><b>Cast</b></div>
+            <div class='sbox_dx'>
+                <!-- actors/actress already associated with the movie -->
+                <?php $rows = $movie->getActors();
+                if (count($rows) > 0){
+                    echo '<div class="form-group">';
+                    foreach ($rows as $row) {
+                        $who = htmlentities($row['name'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['surname'], ENT_QUOTES, 'utf-8');
+                        $who = '<a href="admin-person_page.php?id='.$row['id_person'].'">'.$who.'</a>';
+                        $character = "<i>".htmlentities($row['character_name'], ENT_QUOTES, 'utf-8')."</i>" ?>
+                        <form action="admin-movie_page.php" id="form_delactor" method="post">
+                            <input type='hidden' name='id' value="<?php echo $che_id; ?>">
+                            <input type='hidden' name='delactor' value="<?php echo $row['id_person']; ?>">
+                            <input type="submit" name="btn_delactor" value="Del" class="submit">&nbsp;
+                            <?php echo $who . " as " . $character ;?>
+                            <br>
+                        </form>
+                    <?php
+                    }
+                    echo '</div>';
+                } ?>
+                <!-- new actor/actress to insert -->
+                <form action="admin-movie_page.php" id="form_newactor" method="post">
+                <input type='hidden' name='id' value="<?php echo $che_id; ?>">
+                <div class="form-group">
+                    <label for="newactor">New star</label><br>
+                    <?php $rows = $movie->getActorsNot() ?>
+                    <select id="newactor" name="newactor">
+                        <option value="0">Select the new star</option>
+                        <?php foreach($rows as $row){
+                            $who = htmlentities($row['surname'], ENT_QUOTES, 'utf-8') . " " . htmlentities($row['name'], ENT_QUOTES, 'utf-8');
+                            echo '<option value="'.$row['id_person'].'">'.$who.'</option>';
+                            } ?>
+                    </select> 
+                    <br><label for="character_name">Character name</label>
+                    <input type="text" name="character_name" class="form-control" value="">
+                    <input type="submit" name="btn_newactor" value="Insert new star">
+                    
+                </div>
+            </form>
+            </div>
+        </div>
+        <!-- CAST END-->
         
-    <?php
-        echo 'cast list + cancel<br>';
-        echo 'cast add new<br>';
-        
-        //Poster
-        echo '<div class="container_page" >';
+        <!-- POSTER START-->
+        <div class="container_border" >
+        <?php
         $img = "archive/movies/".$che_id.".jpg";
         if (is_file($img)){ 
             echo "<div class='pic'><img src='".$img."'></div>";
         } ?>
-        
             <div class='box_dx_top'>
                 <form enctype="multipart/form-data" action="admin-movie_page.php" id="form_image" method="post">
                     <input type='hidden' name='id' value="<?php echo $che_id; ?>">
@@ -193,13 +251,14 @@
                 </form>
             </div>
         </div>
+        <!-- POSTER END -->
         
-    <?php   
-    }
-    ?>
+        <?php   
+    } ?>
         
-
-        <?php include "includes/admin-links.php"; ?>
+        
+    
+    <?php include "includes/admin-links.php"; ?>
     </div>
         
     <?php include "includes/footer.php"; ?>

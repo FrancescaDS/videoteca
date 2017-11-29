@@ -9,35 +9,6 @@ $().ready(function() {
         };
     }
  
-    $("#form_movie").validate({
-        onfocusout: injectTrim($.validator.defaults.onfocusout),
-        rules : {
-            title : {
-              required : true,
-              minlength : 2,
-              maxlength : 64
-            },
-            year : {
-                required : true,
-                number : true,
-                min : 1900,
-                max : 2017
-            }
-        },
-        messages: {
-            title: {
-                required: "Insert a valid title (2-64 chars)",
-                minlength: "Title must be min 2 chars",
-                maxlength: "Title must be max 64 chars"
-            },
-            year: "Insert a valid year between 1900 and 2017"
-        },
-        submitHandler: function(form) {
-            form.submit();
-        }
-    });
-    
-    
     $("#form_register").validate({
         onfocusout: injectTrim($.validator.defaults.onfocusout),
         rules : {
@@ -124,9 +95,7 @@ $().ready(function() {
               required : true,
               email : true
             },
-            password : {
-              required : true
-            }
+            password : "required"
         },
         messages: {
             password: "Insert a valid password",
@@ -137,11 +106,33 @@ $().ready(function() {
         }
     });
     
+    $("#form_movie").validate({
+        onfocusout: injectTrim($.validator.defaults.onfocusout),
+        rules : {
+            title : {
+              required : true,
+              minlength : 2,
+              maxlength : 64
+            },
+            year : {
+                required : true,
+                digits : true,
+                min : 1900,
+                max : 2017
+            }
+        },
+        messages: {
+            title: "Insert a valid title (2-64 chars)",
+            year: "Insert a valid year between 1900 and 2017"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    
     $("#form_image").validate({
         rules : {
-            image : {
-              required : true
-            }
+            image : "required"
         },
         messages: {
             image: "Insert a valid image file .jpg"
@@ -159,6 +150,59 @@ $().ready(function() {
         },
         messages: {
             newdirector: "Select the new director from the list"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    
+    $("#form_newactor").validate({
+        rules : {
+            newactor : {
+              min : 1
+            },
+            character_name: "required"
+        },
+        messages: {
+            newactor : "Select the new star from the list",
+            character_name: "Write the name of the character"
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    
+    $("#form_person").validate({
+        onfocusout: injectTrim($.validator.defaults.onfocusout),
+        rules : {
+            name : {
+              required : true,
+              minlength : 2,
+              maxlength : 64
+            },
+            surname : {
+              required : true,
+              minlength : 2,
+              maxlength : 64
+            },
+            dob : {
+              required : true,
+              date : true
+            },
+            place : {
+              required : true,
+              minlength : 2,
+              maxlength : 64
+            },
+            dod : {
+                date : true
+            }
+        },
+        messages: {
+            name: "Insert a valid name (2-64 chars)",
+            surname: "Insert a valid surname (2-64 chars)",
+            dob: "Insert a valid date of birth",
+            place: "Insert a valid place of birth (2-64 chars)"
         },
         submitHandler: function(form) {
             form.submit();

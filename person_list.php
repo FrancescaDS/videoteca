@@ -40,7 +40,11 @@
 
         foreach($rows as $row){
             echo "<tr>";
-            echo "<td><A href='person_page.php?id=" . $row['id_person'] . "'>" . htmlentities($row['name'], ENT_QUOTES, 'utf-8')  ." ". htmlentities($row['surname'], ENT_QUOTES, 'utf-8')  . "</a></td>";
+            echo "<td><A href='person_page.php?id=" 
+                . $row['id_person'] . "'>" 
+                . htmlentities($row['surname'], ENT_QUOTES, 'utf-8')  
+                ." ". htmlentities($row['name'], ENT_QUOTES, 'utf-8')  
+                . "</a></td>";
             $dob = new DateTime($row['dob']);
             echo "<td>" . $dob->format('j F Y') ."</td>";
             echo "<tr>";

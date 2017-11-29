@@ -31,7 +31,7 @@
      ?>
         <div class="container_dx">
             <div class="bbox_dx">
-                <div class="text_dx"><?php echo $title; ?>, (<?php echo $movie->getData()['year']; ?>)</div>
+                <div class="text_dx"><?php echo $title; ?> (<?php echo $movie->getData()['year']; ?>)</div>
                 
                 <?php
                 $list = $movie->getDirectors();
@@ -52,7 +52,7 @@
                 <?php
                 $list = $movie->getActors();
                 if (!empty($list)){ ?>
-                <div class="box_dx">
+                    <div class="box_dx">
                     <div class="sbox_sx"><b>Stars</b></div>
                     <div class="sbox_dx">
                     <?php
@@ -60,10 +60,10 @@
                         echo "<a href='person_page.php?id=" . $row['id_person'] . "'>"
                             . htmlentities($row['name'], ENT_QUOTES, 'utf-8') ." "
                             . htmlentities($row['surname'], ENT_QUOTES, 'utf-8') ."</A>"
-                            . " as " . htmlentities($row['character_name'], ENT_QUOTES, 'utf-8') . "<br>";
+                            . " as <i>" . htmlentities($row['character_name'], ENT_QUOTES, 'utf-8') . "</i><br>";
                     } ?>
                     </div>
-                </div>
+                    </div>
                 <?php } ?>
             
             </div>        

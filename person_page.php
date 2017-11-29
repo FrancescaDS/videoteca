@@ -66,9 +66,12 @@
                         }
                         $list = $person->getPlayedMovies();
                         if (!empty($list)){ 
-                            echo "<b>Actor/Actress</b><br>"; 
+                            echo "<b>Star</b><br>"; 
                             foreach ($list as $row) {
-                                echo "<a href='movie_page.php?id=" . $row['id_movie'] . "'>" . $row['title'] ."</A>  (".$row['year'].") as " . $row['character_name'] . "<br>";
+                                echo "<a href='movie_page.php?id=" 
+                                . $row['id_movie'] . "'>" 
+                                . htmlentities($row['title'], ENT_QUOTES, 'utf-8') ."</A>  (".$row['year'].") "
+                                . "as <i>" . htmlentities($row['character_name'], ENT_QUOTES, 'utf-8') . "</i><br>";
                             }
                         } ?>
                     </div>

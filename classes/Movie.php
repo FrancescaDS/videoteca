@@ -165,15 +165,33 @@ class Movie{
     }
     
     public function insertDirector($id_person){
+        return $this->insertPerson("dir", $id_person);
+    }
+    
+    public function insertActor($id_person, $character_name){
+        return $this->insertPerson("act", $id_person, $character_name);
+    }
+    
+    protected function insertPerson($what, $id_person, $character_name=""){
         try{
+            if ($what == "dir"){
+                $table = "directors";
+            }else{
+                $table = "actors";
+            }
             $id_movie = $this->data['id_movie'];
-            $sql = "SELECT * FROM directors "
-                . "WHERE id_movie=".$id_movie." AND id_person=".$id_person;
+            $sql = "SELECT * FROM " . $table
+                . " WHERE id_movie=".$id_movie." AND id_person=".$id_person;
             $stat = $this->connection_object->prepare($sql);
             $stat->execute();
             if ($stat->rowCount() === 0) {
-                $sql = "INSERT INTO directors (id_movie, id_person) "
+                if ($what == "dir"){
+                    $sql = "INSERT INTO directors (id_movie, id_person) "
                     . "VALUES (".$id_movie.",".$id_person.")";
+                }else{
+                    $sql = "INSERT INTO actors (id_movie, id_person, character_name) "
+                    . "VALUES (".$id_movie.",".$id_person.", '".$character_name."')";
+                }
                 $stat = $this->connection_object->prepare($sql);
                 $result = $stat->execute();
             } else{
@@ -186,9 +204,22 @@ class Movie{
     }
     
     public function deleteDirector($id_person){
+        return $this->deletePerson("dir", $id_person);
+    }
+    
+    public function deleteActor($id_person){
+        return $this->deletePerson("act", $id_person);
+    }
+    
+    public function deletePerson($what, $id_person){
         try{
+            if ($what == "dir"){
+                $table = "directors";
+            }else{
+                $table = "actors";
+            }
             $id_movie = $this->data['id_movie'];
-            $sql = "DELETE FROM directors WHERE "
+            $sql = "DELETE FROM ".$table." WHERE "
                 . "id_movie=".$id_movie." AND id_person=".$id_person;
             $stat = $this->connection_object->prepare($sql);
             $result = $stat->execute();

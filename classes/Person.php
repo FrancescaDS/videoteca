@@ -10,6 +10,9 @@ class Person{
     public function __construct($id = 0) {
         try {
             if ($id != 0){
+                $db = new Mydb();
+                $this->connection_object = $db->mysql;
+                
                 $this->selectPerson($id);
             }
         } catch (Exception $ex) {
@@ -19,9 +22,6 @@ class Person{
     
     private function selectPerson($id){
         try {
-            $db = new Mydb();
-            $this->connection_object = $db->mysql;
-            
             $sql = "SELECT * FROM people WHERE id_person=".$id;
             $stat = $this->connection_object->prepare($sql);
             $stat->execute();
@@ -72,4 +72,103 @@ class Person{
         }
     }
     
+    public function insertUpdate($name, $surname, $dob, $place, $dod) {
+        try{
+            if (isset($this->data['id_person'])){
+                return $this->updatePerson($name, $surname, $dob, $place, $dod);
+            } else {
+                return $this->insertPerson($name, $surname, $dob, $place, $dod);
+            }
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
+    
+    protected function insertPerson($name, $surname, $dob, $place, $dod) {
+        try{
+            $sql = "INSERT INTO people (name, surname, dob, place, dod) "
+                . "VALUES ('".$name."','".$surname."',"
+                . "'" . STR_TO_DATE($dob, '%d/%m/%Y' )."','".$place."'";
+            if ($dod <> ""){
+                $sql = $sql . ", '" . STR_TO_DATE($dod, '%d/%m/%Y' )."' )";
+            }else{
+                $sql = $sql . ", '0000-00-00' )";
+            }
+            $stat = $this->connection_object->prepare($sql);
+            $result = $stat->execute();
+            if ($result) {
+                $id = $this->connection_object->lastInsertId();
+                $this->selectPerson($id);
+                /*
+                $dob_date = new DateTime($dob);
+                $dob = $dob_date->format("Y-m-d");
+                $dod_date = new DateTime($dod);
+                $dod = $dod_date->format("Y-m-d");
+                
+                $this->data = [
+                   'id_person' => $this->connection_object->lastInsertId(),
+                   'name' => $name,
+                   'surname' => $surname,
+                   'dob' => $dob,
+                   'place' => $place,
+                   'dod' => $dod
+               ];*/    
+            }
+            return $result;
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
+    
+    protected function updatePerson($name, $surname, $dob, $place, $dod) {
+        try{
+            //$data_input = "31/05/2012";
+            $sql = "UPDATE people SET name='".$name."', "
+                . "surname='".$surname."', "
+                . "dob='" . STR_TO_DATE($dob, '%d/%m/%Y' )."', "
+                . "place='".$place."' ";
+                if ($dod <> ""){
+                    $sql = $sql . ", dod='" . STR_TO_DATE($dod, '%d/%m/%Y' )."' ";
+                }
+                $sql = $sql . "WHERE id_person=".$this->data['id_person'];
+            $stat = $this->connection_object->prepare($sql);
+            $result = $stat->execute();
+            if ($result) {
+                $this->selectPerson($this->data['id_person']);
+                /*$dob_date = new DateTime($dob);
+                $dob = $dob_date->format("Y-m-d");
+                $dod_date = new DateTime($dod);
+                $dod = $dod_date->format("Y-m-d");
+                
+                $this->data['name'] = $name;
+                $this->data['surname'] = $surname;  
+                $this->data['dob'] = $dob; 
+                $this->data['place'] = $place; 
+                $this->data['dod'] = $dod; */
+            }
+            return $result;
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
+    
+    public function isUnique($name, $surname, $dob){
+        try{
+            $result = false;
+            $sql = "SELECT * FROM people WHERE name='".$name."' "
+                . "AND surname='".$surname."' "
+                . "AND dob='" . STR_TO_DATE($dob, '%d/%m/%Y' )."' ";
+            if (isset($this->data['id_person'])){
+                $sql = $sql . " AND id_person<>".$this->data['id_person'] ;
+            }
+            $stat = $this->connection_object->prepare($sql);
+            $stat->execute();
+            if ($stat->rowCount() === 0) {
+                $result = true;
+            }
+            return $result;
+        } catch (Exception $ex) {
+            exit($ex->getMessage());
+        }
+    }
 }
